@@ -101,41 +101,49 @@ main();
 
 
 
-// let scene, camera, renderer, cube;
+let scene, camera, renderer, sphere, wireframe, line;
 
-// function init() {
-//   scene = new THREE.Scene();
+function init() {
+  scene = new THREE.Scene();
 
-// camera = new THREE.PerspectiveCamera(
-//   75,
-//   window.innerWidth / window.innerHeight,
-//   0.1,
-//   1000
-// );
+camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
+);
 
-// renderer = new THREE.WebGLRenderer({antialias: true});
+renderer = new THREE.WebGLRenderer({antialias: true});
 
-// renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-// document.body.appendChild(renderer.domElement);
+document.body.appendChild(renderer.domElement);
 
-// const geometry = new THREE.CubeGeometry(2, 2, 2);
-// const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-// cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
+const geometry = new THREE.SphereGeometry(9, 50, 50);
+
+sphere = new THREE.Mesh(geometry, wireframe);
+
+wireframe = new THREE.WireframeGeometry(geometry);
+line = new THREE.LineSegments(wireframe);
+line.material.depthTest = false;
+line.material.transparent = false;
+
+scene.add(line);
+
+camera.position.z = 15;
+}
 
 
-// camera.position.z = 5;
-// }
 
+function animate() {
+  requestAnimationFrame(animate);
+  line.rotation.x += 0.01;
+  line.rotation.y -= 0.01;
 
-
-// function animate() {
-//   requestAnimationFrame(animate);
-//   cube.rotation.x += 0.01;
-//   cube.rotation.y += 0.01;
-//   renderer.render(scene, camera);
-// }
+  sphere.rotation.x += 0.01;
+  sphere.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
